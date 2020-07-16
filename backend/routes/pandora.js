@@ -1,7 +1,6 @@
 const router = require('express').Router();
 const auth = require('../auth')
 let User = require('../models/user.model');
-let Bracelet = require('../models/bracelet.model');
 let Charm = require('../models/charm.model');
 const bcrypt = require('bcrypt')
 
@@ -11,7 +10,6 @@ const bcrypt = require('bcrypt')
 
 router.get('/charmsSorted',auth,async(req,res) => {
     const users = await User.find()
-    console.log(users)
     try {
         await req.user.populate({
             path:'Charm',
@@ -28,7 +26,6 @@ router.get('/charmsSorted',auth,async(req,res) => {
 
 
 router.route('/charms').get((req, res) => {
-    console.log(req.query.limit)
     Charm.find().select('newCharm charmName charmPrice overallRatio numberRatio charmPhotos')
     .limit(parseInt(req.query.limit))
     .then(charm => res.json(charm))
@@ -89,26 +86,10 @@ router.post('/addCharm',async (req, res) => {
     res.send(oldComment)
   })
 
-//BRACELETS ROUTES
-//#########################################################
-
-
-router.route('/bracelets').get((req, res) => {
-    Bracelet.find()
-    .then(bracelet => res.json(bracelet))
-    .catch(err => res.status(400).json('Error: ' + err));
-});
-
-router.route('/addBracelet').post((req, res) => {
-    const bracelet = new Bracelet(req.body)
-    bracelet.save()
-    .then(response => console.log('Bracelet added !'))
-    .catch(error => console.log('Bracelet not added !'))
-});
-
 //USER ROUTES
 //#########################################################
 
+//Wyświetlenie produktów w koszyku
 router.get('/shoppingCart',auth,async (req, res) => {
     const tab =[]
     const tab2 =[]
@@ -116,50 +97,40 @@ router.get('/shoppingCart',auth,async (req, res) => {
         tab.push(item.totalPrice)
         tab2.push(item.totalQuantity)
     })
-    if(tab.length==0) {
-       res.send(tab)
-    } else {
+    if(tab.length==0) { res.send(tab) } else {
         const sum =tab.reduce(function myFunction(total, value, index, array) {
-            return total + value;
-          })
+            return total + value; })
         const sum2 =tab2.reduce(function myFunction(total, value, index, array) {
-            return total + value;
-        })
+            return total + value; })
         req.user.shoppingCartTotalPrice=sum;
         req.user.shoppingCartTotalQuantity=sum2;
         req.user.save()
     }
-
     res.send(req.user)
 });
 
+//Dodanie produktu do koszyka
 router.patch('/shoppingCart/update/:id',auth,async (req, res) => {
     const product = [{product:req.params.id}]
     const exist = req.user.shoppingCart
     const charm =await Charm.findById(req.params.id)
-
     //Sprawdzenie czy koszyk jest pusty - jeśli tak to dodaje pierwszy produkt +
     if(req.user.shoppingCart.length==0) {
         req.user.shoppingCart =await req.user.shoppingCart.concat(product)
         req.user.shoppingCart[0].totalQuantity = 1
         req.user.shoppingCart[0].totalPrice = req.user.shoppingCart[0].totalQuantity * charm.charmPrice
-    } //Jeśli koszyk
+    } //Jeśli koszyk jest pełny to sprawdza czy nie ma juz danego produktu
      else if(req.user.shoppingCart.length!==0) {
         const check = exist.filter(function myFunction(value, index, array) {
-            return value.product._id == req.params.id
-        })
+            return value.product._id == req.params.id })
       if(check.length!==0) {
         check[0].totalQuantity = check[0].totalQuantity + 1
         check[0].totalPrice = check[0].totalQuantity * charm.charmPrice
         } else if(check.length==0){
-            console.log('Dodaje nowy')
             req.user.shoppingCart =await req.user.shoppingCart.concat(product)
             const dlugosc = req.user.shoppingCart.length - 1
-            console.log(dlugosc)
             req.user.shoppingCart[dlugosc].totalQuantity = 1
-            req.user.shoppingCart[dlugosc].totalPrice = req.user.shoppingCart[dlugosc].totalQuantity * charm.charmPrice
-            console.log(req.user.shoppingCart)
-            
+            req.user.shoppingCart[dlugosc].totalPrice = req.user.shoppingCart[dlugosc].totalQuantity * charm.charmPrice      
         }
     }
     req.user.save()
@@ -174,8 +145,6 @@ router.delete('/shoppingCart/cleanShoppingCart',auth,async (req, res) => {
 
 router.post('/shoppingCart/cleanShoppingCart2/:id',auth,async (req, res) => {
     const newCart = req.user.shoppingCart.filter((item) => {
-        console.log(item.product._id)
-        console.log(req.params.id)
         return item.product._id != req.params.id
     })
     req.user.shoppingCart = newCart
