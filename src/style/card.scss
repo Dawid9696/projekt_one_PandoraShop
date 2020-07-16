@@ -1,0 +1,38 @@
+.productCard {
+    text-decoration: none;
+    background-color:rgb(255, 232, 232) ;
+    margin:10px;
+    padding: 10px;
+    display: flex;
+    width:270px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    text-align: center;
+    position: relative;
+ 
+    box-sizing: border-box;
+}
+
+.productCard:hover {
+    transform: scale(1.02);
+    background-color:rgb(236, 205, 205) ;
+}
+
+.productCard >div {
+    margin:5px;
+
+}
+
+.productCard-photo {
+    max-width: auto;
+    background-size: cover;
+}
+
+.productCard-desc {
+    background-color: white ;
+}
+
+.productCard-image {
+    max-width: 100%;
+}

@@ -1,0 +1,115 @@
+.shoppingCart {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: stretch;
+    text-align: center;
+    margin: 20px;
+    padding: 20px;
+}
+
+.shoppingCart-one {
+
+    background-color: white;
+    flex:2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex-direction: column;
+    margin: 20px;
+}
+
+.shoppingCart-one-card {
+    background-color: rgb(255, 224, 167);
+    display: flex;
+    flex-direction: row;
+    width: 60%;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin: 5px;
+    padding: 1px;
+}
+
+.shoppingCart-one-card >div{
+
+   margin:5px;
+}
+
+.shoppingCart-two{
+    flex:1;
+    background-color:rgb(255, 232, 232) ;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    text-align: center;
+    flex-direction: row;
+    margin: 10px;
+    padding: 10px;
+
+}
+
+.shoppingCart-two-inside {
+    display:flex ;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin:10px;
+    padding:10px;
+    background-color: white;
+}
+
+.shoppingCart-two-inside >div{
+    font-size: 20px;
+    width: 500px;
+    margin:10px;
+
+}
+
+.shoppingCart-button {
+  
+    background-color: rgb(255, 232, 232);
+}
+
+.shoppingCart-button:hover {
+    background-color: rgb(255, 189, 189);
+}
+
+.shoppingCart-delete {
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.shoppnigCart-deleteButton {
+    background-color: rgb(252, 98, 98);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding:2px;
+    width:30%;
+    border-radius: 2px;
+}
+
+.shoppnigCart-deleteButton:hover {
+    background-color: rgb(255, 67, 67);
+    color:white;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+}
+
+.shoppingCart-one-card-desc {
+    
+    font-size: 15px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+    text-align: center;
+    align-items: stretch;
+}
